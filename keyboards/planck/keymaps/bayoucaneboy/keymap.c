@@ -15,11 +15,13 @@ extern keymap_config_t keymap_config;
 // The underscores don't mean anything - you can have a layer called STUFF or any other name.
 // Layer names don't all need to be of the same length, obviously, and you can also skip them
 // entirely and just use numbers.
-#define _QWERTY 1
-#define _COLEMAK 2
-#define _LOWER 3
-#define _RAISE 4
-#define _ADJUST 16
+enum keyboard_layers {
+  LAYER_QWERTY = 0,
+  LAYER_COLEMAK,
+  LAYER_LOWER,
+  LAYER_RAISE,
+  LAYER_ADJUST
+};
 
 enum planck_keycodes {
   QWERTY = SAFE_RANGE,
@@ -27,6 +29,11 @@ enum planck_keycodes {
   LOWER,
   RAISE,
   BACKLIT,
+};
+
+enum macro_id {
+  hello,
+  finalCountdownId
 };
 
 // Fillers to make layering more clear
@@ -49,69 +56,8 @@ enum planck_keycodes {
 #define LT_SPC  LT(LOWER, KC_SPC)
 #define MT_RSFT_ENT MT(MOD_RSFT, KC_ENT)
 
+#define FNL_CTDN M(finalCountdownId)
 
-#ifdef AUDIO_ENABLE
-
-// C# B C# F# | - . D C# D C# B
-// |-. D C# D F# | -. B A B A G# B | A G# A B A B C# B A G# F D C# C# C# D C# B C#
-#define FNL_CTDN MC(1)
-#define FINAL_COUNTDOWN_SOUND  \
-S__NOTE(_CS5  ),      \
-S__NOTE(_B5  ),      \
-Q__NOTE(_CS5  ),      \
-Q__NOTE(_FS4  ),      \
-\
-QD_NOTE(REST  ),      \
-S__NOTE(_D5  ),      \
-S__NOTE(_CS5  ),      \
-E__NOTE(_D5  ),      \
-E__NOTE(_CS5  ),      \
-Q__NOTE(_B5  ),      \
-\
-QD_NOTE(REST  ),      \
-S__NOTE(_D5  ),      \
-S__NOTE(_CS5  ),      \
-Q__NOTE(_D5  ),      \
-Q__NOTE(_FS4  ),      \
-\
-QD_NOTE(REST  ),      \
-S__NOTE(_B5  ),      \
-S__NOTE(_A5  ),      \
-E__NOTE(_B5  ),      \
-E__NOTE(_A5  ),      \
-E__NOTE(_GS4  ),      \
-E__NOTE(_B5  ),      \
-\
-QD_NOTE(_A5  ),      \
-S__NOTE(_GS4  ),      \
-S__NOTE(_A5  ),      \
-\
-QD_NOTE(_B5  ),      \
-S__NOTE(_A5  ),      \
-S__NOTE(_B5  ),      \
-\
-E__NOTE(_CS5  ),      \
-E__NOTE(_B5  ),      \
-E__NOTE(_A5  ),      \
-E__NOTE(_GS4  ),      \
-Q__NOTE(_F4  ),      \
-Q__NOTE(_D5  ),      \
-\
-HD_NOTE(_CS5  ),      \
-S__NOTE(_CS5  ),      \
-S__NOTE(_D5  ),      \
-S__NOTE(_CS5  ),      \
-E__NOTE(_B5  ),      \
-\
-W_NOTE(_CS5  ),
-
-float tone_startup[][2]         = SONG(STARTUP_SOUND);
-float tone_qwerty[][2]          = SONG(QWERTY_SOUND);
-float tone_colemak[][2]         = SONG(COLEMAK_SOUND);
-float music_scale[][2]          = SONG(MUSIC_SCALE_SOUND);
-float tone_final_countdown[][2] = SONG(FINAL_COUNTDOWN_SOUND);
-float tone_goodbye[][2]         = SONG(GOODBYE_SOUND);
-#endif
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -124,14 +70,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+-------------+------+------+------+------+------|
  * |   Z  |   X  |   C  |   V  |   B  |  DEL |  '   |   N  |   M  |   ,  |   .  |   /  |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
- * | SHIFT|      | Ctrl | Alt  | GUI  |  Space/Low  | RAISE|      |      |      |Enter |
+ * | SHIFT| Ctrl | Alt  | GUI  | LOWER|    Space    | RAISE| ENTER|      |      |SHIFT |
  * `-----------------------------------------------------------------------------------'
  */
-[_QWERTY] = {
+[LAYER_QWERTY] = {
   {KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_ESC,  KC_ENT,  KC_Y,  KC_U,    KC_I,    KC_O,    KC_P},
   {KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_LCBR, KC_RCBR, KC_H,  KC_J,    KC_K,    KC_L,    TD_SCLN},
-  {KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_DEL,  TD_QUOT, KC_N,  KC_M,    KC_COMM, KC_DOT,  KC_SLSH},
-  {KC_LSFT, _______, KC_LCTL, KC_LALT, KC_LGUI, LT_SPC/*------*/, RAISE, _______, _______, _______, MT_RSFT_ENT}
+  {KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_BSPC, TD_QUOT, KC_N,  KC_M,    KC_COMM, KC_DOT,  KC_SLSH},
+  {KC_LSFT, KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  KC_SPC,  RAISE, KC_ENT, _______, _______, KC_RSFT}
 },
 
 
@@ -146,7 +92,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * | Hyper| Ctrl | Alt  | GUI  |Lower |    Space    |Raise | Left | Down |  Up  |Right |
  * `-----------------------------------------------------------------------------------'
  */
-[_COLEMAK] = {
+[LAYER_COLEMAK] = {
   {KC_TAB,  KC_Q,    KC_W,    KC_F,    KC_P,    KC_G,    KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCLN, KC_BSPC},
   {KC_ESC,  KC_A,    KC_R,    KC_S,    KC_T,    KC_D,    KC_H,    KC_N,    KC_E,    KC_I,    KC_O,    KC_QUOT},
   {KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_K,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, MT(MOD_RSFT, KC_ENT) },
@@ -164,10 +110,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * | SHIFT|      | Ctrl | Alt  | GUI  |  Space/Low  | RAISE|   +  |   0  |   .  |Enter |
  * `-----------------------------------------------------------------------------------'
  */
-[_LOWER] = {
+[LAYER_LOWER] = {
   {KC_EXLM, KC_AT,   KC_HASH,  KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_7,    KC_8,    KC_9,    _______},
   {_______, KC_LEFT, KC_UP,    KC_RGHT, KC_PGUP, KC_LPRN, KC_RPRN, KC_PLUS, KC_4,    KC_5,    KC_6,    _______},
-  {BACKLIT, KC_HOME, KC_DOWN,  KC_END,  KC_PGDN, KC_BSPC, KC_PIPE, KC_MINS, KC_1,    KC_2,    KC_3,    _______},
+  {BACKLIT, KC_HOME, KC_DOWN,  KC_END,  KC_PGDN, KC_DEL, KC_PIPE, KC_MINS, KC_1,    KC_2,    KC_3,    _______},
   {_______, _______, _______,  _______, _______, _______, _______, _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY}
 },
 
@@ -183,7 +129,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * | SHIFT|      | Ctrl | Alt  | GUI  |  Space/Low  | RAISE| Next | Vol- | Vol+ | Play |
  * `-----------------------------------------------------------------------------------'
  */
-[_RAISE] = {
+[LAYER_RAISE] = {
   {KC_GRV,  _______, _______, _______, _______, _______, _______, _______, KC_F9,   KC_F10,  KC_F11,  KC_F12},
   {KC_DEL,  _______, _______, _______, _______, KC_LABK, KC_RABK, _______, KC_F5,   KC_F6,   KC_F7,   KC_F8},
   {_______, _______, _______, _______, _______, _______, _______, _______, KC_F1,   KC_F2,   KC_F3,   KC_F4},
@@ -202,7 +148,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |      |      |      |      |      |             |      | Next | Vol- | Vol+ | Play |
  * `-----------------------------------------------------------------------------------'
  */
-[_RAISE] = {
+[LAYER_RAISE] = {
   {KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC},
   {KC_DEL,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_MINS, KC_EQL,  KC_LBRC, KC_RBRC, KC_BSLS},
   {_______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_NUHS, KC_NUBS, _______, _______, _______},
@@ -216,11 +162,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |      |      |      |Aud on|Audoff|      |      |Qwerty|Colemk|      |      |      |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * |      |Voice-|Voice+|Mus on|Musoff|MIDIon|MIDIof|      |      |      |      |      |
- * |------+------+------+------+------+------+------+------+------+------+------+------|
+ s |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |      |      |      |      |             |      |      |      |      |      |
  * `-----------------------------------------------------------------------------------'
  */
-[_ADJUST] = {
+[LAYER_ADJUST] = {
   {_______, RESET,   _______, _______, _______, _______, _______, _______, _______, _______, _______, FNL_CTDN},
   {_______, _______, _______, AU_ON,   AU_OFF,  _______, _______, QWERTY,  COLEMAK, _______, _______, _______},
   {_______, MUV_DE,  MUV_IN,  MU_ON,   MU_OFF,  MI_ON,   MI_OFF,  _______, _______, _______, _______, _______},
@@ -232,6 +178,60 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 
+#ifdef AUDIO_ENABLE
+// C# B C# F# | - . D C# D C# B
+// |-. D C# D F# | -. B A B A G# B | A G# A B A B C# B A G# F D C# C# C# D C# B C#
+#define FINAL_COUNTDOWN_SOUND  \
+S__NOTE(_CS5  ),      \
+S__NOTE(_B5  ),      \
+Q__NOTE(_CS5  ),      \
+Q__NOTE(_FS4  ),      \
+QD_NOTE(_REST  ),      \
+S__NOTE(_D5  ),      \
+S__NOTE(_CS5  ),      \
+E__NOTE(_D5  ),      \
+E__NOTE(_CS5  ),      \
+Q__NOTE(_B5  ),      \
+QD_NOTE(_REST  ),      \
+S__NOTE(_D5  ),      \
+S__NOTE(_CS5  ),      \
+Q__NOTE(_D5  ),      \
+Q__NOTE(_FS4  ),      \
+QD_NOTE(_REST  ),      \
+S__NOTE(_B5  ),      \
+S__NOTE(_A5  ),      \
+E__NOTE(_B5  ),      \
+E__NOTE(_A5  ),      \
+E__NOTE(_GS4  ),      \
+E__NOTE(_B5  ),      \
+QD_NOTE(_A5  ),      \
+S__NOTE(_GS4  ),      \
+S__NOTE(_A5  ),      \
+QD_NOTE(_B5  ),      \
+S__NOTE(_A5  ),      \
+S__NOTE(_B5  ),      \
+E__NOTE(_CS5  ),      \
+E__NOTE(_B5  ),      \
+E__NOTE(_A5  ),      \
+E__NOTE(_GS4  ),      \
+Q__NOTE(_F4  ),      \
+Q__NOTE(_D5  ),      \
+HD_NOTE(_CS5  ),      \
+S__NOTE(_CS5  ),      \
+S__NOTE(_D5  ),      \
+S__NOTE(_CS5  ),      \
+E__NOTE(_B5  ),      \
+W__NOTE(_CS5  ),
+
+
+
+float tone_startup[][2]         = SONG(STARTUP_SOUND);
+float tone_qwerty[][2]          = SONG(QWERTY_SOUND);
+float tone_colemak[][2]         = SONG(COLEMAK_SOUND);
+float music_scale[][2]          = SONG(MUSIC_SCALE_SOUND);
+float tone_final_countdown[][2] = SONG(FINAL_COUNTDOWN_SOUND);
+float tone_goodbye[][2]         = SONG(GOODBYE_SOUND);
+#endif
 
 void persistant_default_layer_set(uint16_t default_layer) {
   eeconfig_update_default_layer(default_layer);
@@ -251,7 +251,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         #ifdef AUDIO_ENABLE
           PLAY_NOTE_ARRAY(tone_qwerty, false, 0);
         #endif
-        persistant_default_layer_set(1UL<<_QWERTY);
+        persistant_default_layer_set(1UL<<LAYER_QWERTY);
       }
       return false;
       break;
@@ -260,32 +260,32 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         #ifdef AUDIO_ENABLE
           PLAY_NOTE_ARRAY(tone_colemak, false, 0);
         #endif
-        persistant_default_layer_set(1UL<<_COLEMAK);
+        persistant_default_layer_set(1UL<<LAYER_COLEMAK);
       }
       return false;
       break;
     case LOWER:
       if (record->event.pressed) {
-        layer_on(_LOWER);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+        layer_on(LAYER_LOWER);
+        update_tri_layer(LAYER_LOWER, LAYER_RAISE, LAYER_ADJUST);
       } else {
-        layer_off(_LOWER);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+        layer_off(LAYER_LOWER);
+        update_tri_layer(LAYER_LOWER, LAYER_RAISE, LAYER_ADJUST);
       }
       return false;
       break;
     case RAISE:
       if (record->event.pressed) {
-        layer_on(_RAISE);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+        layer_on(LAYER_RAISE);
+        update_tri_layer(LAYER_LOWER, LAYER_RAISE, LAYER_ADJUST);
       } else {
-        layer_off(_RAISE);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+        layer_off(LAYER_RAISE);
+        update_tri_layer(LAYER_LOWER, LAYER_RAISE, LAYER_ADJUST);
       }
       return false;
       break;
     case BACKLIT:
-      if (record->event.pressed) {
+/**      if (record->event.pressed) {
         register_code(KC_RSFT);
         #ifdef BACKLIGHT_ENABLE
           backlight_step();
@@ -293,6 +293,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       } else {
         unregister_code(KC_RSFT);
       }
+      **/
       return false;
       break;
   }
@@ -332,6 +333,10 @@ void music_scale_user(void)
 
 #endif
 
+//const uint16_t PROGMEM fn_actions[] = {
+//  [0] = ACTION_MACRO(FNL_CTDN)
+//}
+
 const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt) // this is the function signature -- just copy/paste it into your keymap file as it is.
 {
   switch(id) {
@@ -340,7 +345,7 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt) //
         return MACRO( I(255), T(H), T(E), T(L), T(L), W(255), T(O), END  ); // this sends the string 'hello' when the macro executes
       }
       break;
-     case 1:
+     case finalCountdownId:
        if (record->event.pressed) {
           #ifdef AUDIO_ENABLE
             PLAY_NOTE_ARRAY(tone_final_countdown, false, 0);
@@ -349,4 +354,4 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt) //
        }
   }
   return MACRO_NONE;
-};
+}
