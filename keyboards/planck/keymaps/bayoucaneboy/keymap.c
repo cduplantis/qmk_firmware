@@ -77,7 +77,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   {KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_ESC,  KC_ENT,  KC_Y,  KC_U,    KC_I,    KC_O,    KC_P},
   {KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_LCBR, KC_RCBR, KC_H,  KC_J,    KC_K,    KC_L,    TD_SCLN},
   {KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_BSPC, TD_QUOT, KC_N,  KC_M,    KC_COMM, KC_DOT,  KC_SLSH},
-  {KC_LSFT, KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  KC_SPC,  RAISE, KC_ENT, _______, _______, KC_RSFT}
+  {KC_LSFT, KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  KC_SPC,  RAISE, KC_ENT, _______, _______, MT_RSFT_ENT}
 },
 
 
@@ -103,17 +103,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-----------------------------------------------------------------------------------.
  * |   !  |   @  |   #  |   $  |   %  |   ^  |   &  |   *  |   7  |   8  |   9  |      |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
- * |      | Right|  Up  | Left | PgUp |  (   |   )  |   +  |   4  |   5  |   6  |      |
+ * | TAB  | Right|  Up  | Left | PgUp |  (   |   )  |   +  |   4  |   5  |   6  |      |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
- * | BACLT| Home | Down | End  | PgDn | Bksp |   |  |   -  |   1  |   2  |   3  |      |
+ * |      | Home | Down | End  | PgDn | Bksp |   |  |   -  |   1  |   2  |   3  |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * | SHIFT|      | Ctrl | Alt  | GUI  |  Space/Low  | RAISE|   +  |   0  |   .  |Enter |
  * `-----------------------------------------------------------------------------------'
  */
 [LAYER_LOWER] = {
   {KC_EXLM, KC_AT,   KC_HASH,  KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_7,    KC_8,    KC_9,    _______},
-  {_______, KC_LEFT, KC_UP,    KC_RGHT, KC_PGUP, KC_LPRN, KC_RPRN, KC_PLUS, KC_4,    KC_5,    KC_6,    _______},
-  {BACKLIT, KC_HOME, KC_DOWN,  KC_END,  KC_PGDN, KC_DEL, KC_PIPE, KC_MINS, KC_1,    KC_2,    KC_3,    _______},
+  {KC_TAB, KC_LEFT, KC_UP,    KC_RGHT, KC_PGUP, KC_LPRN, KC_RPRN, KC_PLUS, KC_4,    KC_5,    KC_6,    _______},
+  {_______, KC_HOME, KC_DOWN,  KC_END,  KC_PGDN, KC_DEL, KC_PIPE, KC_MINS, KC_1,    KC_2,    KC_3,    _______},
   {_______, _______, _______,  _______, _______, _______, _______, _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY}
 },
 
@@ -182,15 +182,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // C# B C# F# | - . D C# D C# B
 // |-. D C# D F# | -. B A B A G# B | A G# A B A B C# B A G# F D C# C# C# D C# B C#
 #define FINAL_COUNTDOWN_SOUND  \
-S__NOTE(_CS5  ),      \
-S__NOTE(_B5  ),      \
 Q__NOTE(_CS5  ),      \
-Q__NOTE(_FS4  ),      \
-QD_NOTE(_REST  ),      \
-S__NOTE(_D5  ),      \
-S__NOTE(_CS5  ),      \
-E__NOTE(_D5  ),      \
-E__NOTE(_CS5  ),      \
+Q__NOTE(_B5  ),      \
+H__NOTE(_CS5  ),      \
+H__NOTE(_FS4  ),      \
+HD_NOTE(_REST  ),      \
+Q__NOTE(_D5  ),      \
+Q__NOTE(_CS5  ),      \
+H__NOTE(_D5  ),      \
+H__NOTE(_CS5  ),      \
 Q__NOTE(_B5  ),      \
 QD_NOTE(_REST  ),      \
 S__NOTE(_D5  ),      \
