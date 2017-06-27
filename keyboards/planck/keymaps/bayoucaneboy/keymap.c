@@ -13,27 +13,37 @@
 
 extern keymap_config_t keymap_config;
 
+enum planck_keycodes {
+  QWERTY = SAFE_RANGE,
+  QWERTY2,
+  COLEMAK
+};
+
 // Symbolic names for macro IDs.
-#define _QWERTY  0 // QUERTY layer
-#define _LOWER   1 // Lower layer
-#define _RAISE   2 // Raise layer
-#define _CUSTOM  3 // Custom layer (LOWER + RAISE)
-#define _BL      4 // Backlight
-#define _MOB     5 // Mobile#
-#define _CUS1    6 // Custom macro 1
-#define _CUS2    7 // Custom macro 2
-#define _FNL     8 // Play final countdown
+#define _QWERTY   0  // QUERTY layer
+#define _QWERTY2  1  // QUERTY layer
+#define _COLEMAK  2  // QUERTY layer
+#define _LOWER    3  // Lower layer
+#define _RAISE    4  // Raise layer
+#define _CUSTOM   5  // Custom layer (LOWER + RAISE)
+#define _BL       6  // Backlight
+#define _MOB      7  // Mobile#
+#define _CUS1     8  // Custom macro 1
+#define _CUS2     9  // Custom macro 2
+#define _FNL      10 // Play final countdown
 
 // Macro shortcuts.
-#define QWERTY  M(_LOWER)
-#define LOWER   M(_LOWER)
-#define RAISE   M(_RAISE)
-#define CUSTOM  M(_CUSTOM)
-#define BL      M(_BL)
-#define MOB     M(_MOB)
-#define CUS1    M(_CUS1)
-#define CUS2    M(_CUS2)
-#define FNL     M(_FNL)
+// #define QWERTY   M(_QWERTY)
+// #define QWERTY2  M(_QWERTY2)
+// #define COLEMAK  M(_COLEMAK)
+#define LOWER    M(_LOWER)
+#define RAISE    M(_RAISE)
+#define CUSTOM   M(_CUSTOM)
+#define BL       M(_BL)
+#define MOB      M(_MOB)
+#define CUS1     M(_CUS1)
+#define CUS2     M(_CUS2)
+#define FNL      M(_FNL)
 
 // Func macro definitions.
 #define LWR_PGDN FUNC(0) // Tap for PgDn, hold for LOWER
@@ -120,6 +130,7 @@ WD_NOTE(_CS6  ),
 
 float tone_startup[][2]         = SONG(STARTUP_SOUND);
 float tone_qwerty[][2]          = SONG(QWERTY_SOUND);
+float tone_qwerty2[][2]         = SONG(DVORAK_SOUND);
 float tone_colemak[][2]         = SONG(COLEMAK_SOUND);
 float music_scale[][2]          = SONG(MUSIC_SCALE_SOUND);
 float tone_final_countdown[][2] = SONG(FINAL_COUNTDOWN_SOUND);
@@ -132,25 +143,37 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     {KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC},
     {KC_ESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT},
     {KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, SFT_ENT},
-    {KC_LCTL, KC_DEL,  KC_LALT, KC_LGUI, LOWER,   KC_SPC,  KC_SPC,  RAISE,   KC_RGUI, KC_RALT, KC_BSPC, KC_RCTL}
+    {KC_LCTL, KC_LALT, KC_LGUI, KC_LSFT, LOWER,   KC_SPC,  KC_SPC,  RAISE,   KC_LSFT, KC_RGUI, KC_RALT, KC_RCTL}
 },
-[_RAISE] = { /* RAISE */
-    {KC_NO,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_MRWD, KC_MPLY, KC_MFFD, KC_MUTE, KC_VOLD, KC_VOLU, KC_POWER},
-    {KC_TRNS, KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO},
-    {KC_TRNS, KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO},
-    {KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_PGUP, KC_PGUP, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS}
+[_QWERTY2] = { /* QWERTY */
+    {KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_TAB,  KC_BSLS, KC_Y,    KC_U,    KC_I,    KC_O,    KC_P   },
+    {KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_ESC,  KC_QUOT, KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN},
+    {KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_BSPC, SFT_ENT, KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH},
+    {KC_LCTL, KC_LALT, KC_LGUI, KC_LSFT, LOWER,   KC_SPC,  KC_SPC,  RAISE,   KC_LSFT, KC_RGUI, KC_RALT, KC_RCTL}
+},
+[_COLEMAK] = {
+    {KC_TAB,  KC_Q,    KC_W,    KC_F,    KC_P,    KC_G,    KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCLN, KC_BSPC},
+    {KC_ESC,  KC_A,    KC_R,    KC_S,    KC_T,    KC_D,    KC_H,    KC_N,    KC_E,    KC_I,    KC_O,    KC_QUOT},
+    {KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_K,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, SFT_ENT},
+    {KC_LCTL, KC_LALT, KC_LGUI, KC_LSFT, LOWER,   KC_SPC,  KC_SPC,  RAISE,   KC_LSFT, KC_RGUI, KC_RALT, KC_RCTL}
 },
 [_LOWER] = { /* LOWER */
-    {KC_TILD, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_EQL},
+    {KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_EQL},
     {KC_TRNS, KC_LPRN, KC_RPRN, KC_LCBR, KC_RCBR, KC_HOME, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_NO,   KC_MINS},
     {KC_TRNS, KC_LABK, KC_RABK, KC_LBRC, KC_RBRC, KC_END,  KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_BSLS, KC_TRNS},
     {KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_PGDN, KC_PGDN, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS}
 },
+[_RAISE] = { /* RAISE */
+    {KC_NO,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_MRWD, KC_MPLY, KC_MFFD, KC_MUTE, KC_VOLD, KC_VOLU, KC_POWER},
+    {KC_TRNS, KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO},
+    {KC_TRNS, KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_DEL,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO},
+    {KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_PGUP, KC_PGUP, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS}
+},
 [_CUSTOM] = { /* CUSTOM */
-    {KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS},
-    {KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, FNL,     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS},
-    {KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, MOB,     KC_TRNS, CUS1,    CUS2,    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS},
-    {KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS}
+    {QWERTY,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS},
+    {QWERTY2, KC_TRNS, KC_TRNS, KC_TRNS, FNL,     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS},
+    {COLEMAK, KC_TRNS, KC_TRNS, KC_TRNS, MOB,     KC_TRNS, CUS1,    CUS2,    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS},
+    {KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS}
 }
 };
 
@@ -158,6 +181,39 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 void persistant_default_layer_set(uint16_t default_layer) {
   eeconfig_update_default_layer(default_layer);
   default_layer_set(default_layer);
+}
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  switch (keycode) {
+    case QWERTY:
+      if (record->event.pressed) {
+        #ifdef AUDIO_ENABLE
+          PLAY_NOTE_ARRAY(tone_qwerty, false, 0);
+        #endif
+        persistant_default_layer_set(1UL<<_QWERTY);
+      }
+      return false;
+      break;
+    case QWERTY2:
+      if (record->event.pressed) {
+        #ifdef AUDIO_ENABLE
+          PLAY_NOTE_ARRAY(tone_qwerty2, false, 0);
+        #endif
+        persistant_default_layer_set(1UL<<_QWERTY2);
+      }
+      return false;
+      break;
+    case COLEMAK:
+      if (record->event.pressed) {
+        #ifdef AUDIO_ENABLE
+          PLAY_NOTE_ARRAY(tone_colemak, false, 0);
+        #endif
+        persistant_default_layer_set(1UL<<_COLEMAK);
+      }
+      return false;
+      break;
+  }
+  return true;
 }
 
 // Macro actions for each corresponding ID.
