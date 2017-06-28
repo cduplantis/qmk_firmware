@@ -54,6 +54,7 @@ enum planck_keycodes {
 #define ZM_IN    FUNC(5) // Zoom out
 #define ZM_OUT   FUNC(6) // Zoom in
 #define EM_UNDO  FUNC(7) // Emacs Undo
+#define TILDE   FUNC(7) // Emacs Undo
 
 // Enable these functions using FUNC(n) macro.
 const uint16_t PROGMEM fn_actions[] = {
@@ -65,6 +66,7 @@ const uint16_t PROGMEM fn_actions[] = {
     [5] = ACTION_MODS_KEY(MOD_LCTL, KC_MINS),
     [6] = ACTION_MODS_KEY(MOD_LCTL, KC_PLUS),
     [7] = ACTION_MODS_KEY(MOD_LCTL, KC_UNDS),
+    [8] = ACTION_MODS_KEY(MOD_LSFT, KC_GRV),
  };
 
 
@@ -132,6 +134,7 @@ float tone_startup[][2]         = SONG(STARTUP_SOUND);
 float tone_qwerty[][2]          = SONG(QWERTY_SOUND);
 float tone_qwerty2[][2]         = SONG(DVORAK_SOUND);
 float tone_colemak[][2]         = SONG(COLEMAK_SOUND);
+float tone_querty2[][2]         = SONG(DVORAK_SOUND);
 float music_scale[][2]          = SONG(MUSIC_SCALE_SOUND);
 float tone_final_countdown[][2] = SONG(FINAL_COUNTDOWN_SOUND);
 float tone_goodbye[][2]         = SONG(GOODBYE_SOUND);
@@ -146,10 +149,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     {KC_LCTL, KC_LALT, KC_LGUI, KC_LSFT, LOWER,   KC_SPC,  KC_SPC,  RAISE,   KC_LSFT, KC_RGUI, KC_RALT, KC_RCTL}
 },
 [_QWERTY2] = { /* QWERTY */
-    {KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_TAB,  KC_BSLS, KC_Y,    KC_U,    KC_I,    KC_O,    KC_P   },
-    {KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_ESC,  KC_QUOT, KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN},
-    {KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_BSPC, SFT_ENT, KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH},
-    {KC_LCTL, KC_LALT, KC_LGUI, KC_LSFT, LOWER,   KC_SPC,  KC_SPC,  RAISE,   KC_LSFT, KC_RGUI, KC_RALT, KC_RCTL}
+    {KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_MINS},
+    {KC_LCTL, KC_A,    KC_S,   KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN,	KC_BSPC},
+    {KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, SFT_ENT},
+    {KC_NO,   KC_LGUI, KC_LALT, KC_LCTL, LOWER,   KC_SPC,  KC_SPC,  RAISE,   KC_LSFT, KC_DOWN, KC_UP,   KC_RGHT}
 },
 [_COLEMAK] = {
     {KC_TAB,  KC_Q,    KC_W,    KC_F,    KC_P,    KC_G,    KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCLN, KC_BSPC},
@@ -157,17 +160,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     {KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_K,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, SFT_ENT},
     {KC_LCTL, KC_LALT, KC_LGUI, KC_LSFT, LOWER,   KC_SPC,  KC_SPC,  RAISE,   KC_LSFT, KC_RGUI, KC_RALT, KC_RCTL}
 },
-[_LOWER] = { /* LOWER */
-    {KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_EQL},
+[_RAISE] = { /* LOWER */
+    {TILDE,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,     KC_EQL},
     {KC_TRNS, KC_LPRN, KC_RPRN, KC_LCBR, KC_RCBR, KC_HOME, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_NO,   KC_MINS},
     {KC_TRNS, KC_LABK, KC_RABK, KC_LBRC, KC_RBRC, KC_END,  KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_BSLS, KC_TRNS},
-    {KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_PGDN, KC_PGDN, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS}
+    {KC_POWER, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_PGDN, KC_PGDN, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS}
 },
-[_RAISE] = { /* RAISE */
-    {KC_NO,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_MRWD, KC_MPLY, KC_MFFD, KC_MUTE, KC_VOLD, KC_VOLU, KC_POWER},
+[_LOWER] = { /* RAISE */
+    {KC_ESC,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_LPRN, KC_RPRN, KC_NO},
     {KC_TRNS, KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO},
-    {KC_TRNS, KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_DEL,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO},
-    {KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_PGUP, KC_PGUP, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS}
+    {KC_TRNS, KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_DEL,  KC_LCBR, KC_RCBR, KC_LBRC, KC_RBRC, KC_NO,   KC_MPLY},
+    {KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_PGUP, KC_PGUP, KC_TRNS, KC_MRWD, KC_VOLD, KC_VOLU, KC_MFFD}
 },
 [_CUSTOM] = { /* CUSTOM */
     {QWERTY,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS},
@@ -178,7 +181,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 // Set a layer persistantly.
-void persistant_default_layer_set(uint16_t default_layer) {
+
+void persistent_default_layer_set(uint16_t default_layer) {
   eeconfig_update_default_layer(default_layer);
   default_layer_set(default_layer);
 }
@@ -190,25 +194,25 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         #ifdef AUDIO_ENABLE
           PLAY_NOTE_ARRAY(tone_qwerty, false, 0);
         #endif
-        persistant_default_layer_set(1UL<<_QWERTY);
+        default_layer_set(1UL<<_QWERTY);
       }
       return false;
       break;
     case QWERTY2:
       if (record->event.pressed) {
         #ifdef AUDIO_ENABLE
-          PLAY_NOTE_ARRAY(tone_qwerty2, false, 0);
+    PLAY_NOTE_ARRAY(tone_qwerty2, false, 0);
         #endif
-        persistant_default_layer_set(1UL<<_QWERTY2);
+        default_layer_set(1UL<<_QWERTY2);
       }
       return false;
-      break;
+    break;
     case COLEMAK:
       if (record->event.pressed) {
         #ifdef AUDIO_ENABLE
           PLAY_NOTE_ARRAY(tone_colemak, false, 0);
         #endif
-        persistant_default_layer_set(1UL<<_COLEMAK);
+        default_layer_set(1UL<<_COLEMAK);
       }
       return false;
       break;
@@ -220,6 +224,33 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
 {
     switch(id) {
+    case _QWERTY:
+      if (record->event.pressed) {
+        #ifdef AUDIO_ENABLE
+          PLAY_NOTE_ARRAY(tone_qwerty, false, 0);
+        #endif
+        default_layer_set(1UL<<_QWERTY);
+      }
+      return false;
+      break;
+    case _QWERTY2:
+    if (record->event.pressed) {
+        #ifdef AUDIO_ENABLE
+          PLAY_NOTE_ARRAY(tone_querty2, false, 0);
+        #endif
+        default_layer_set(1UL<<_QWERTY2);
+      }
+      return false;
+      break;
+    case _COLEMAK:
+      if (record->event.pressed) {
+        #ifdef AUDIO_ENABLE
+          PLAY_NOTE_ARRAY(tone_colemak, false, 0);
+        #endif
+        persistent_default_layer_set(1UL<<_COLEMAK);
+      }
+      return false;
+      break;    
     case _RAISE: // Raised layer.
 	if (record->event.pressed) {
 	    layer_on(_RAISE);
