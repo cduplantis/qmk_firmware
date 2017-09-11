@@ -40,6 +40,32 @@ enum planck_keycodes {
 #define _______ KC_TRNS
 #define XXXXXXX KC_NO
 
+
+// Func macro definitions.
+#define LWR_PGDN FUNC(0) // Tap for PgDn, hold for LOWER
+#define RSE_PGUP FUNC(1) // Tap for PgUp, hold for RAISE
+#define CTL_CAPS FUNC(2) // Tap for Caps, hold for Ctrl (DOESN'T SEEM TO WORK)
+#define SFT_ENT  FUNC(3) // Tap for Enter, hold for Shift
+#define ZM_NRM   FUNC(4) // Zoom normal
+#define ZM_IN    FUNC(5) // Zoom out
+#define ZM_OUT   FUNC(6) // Zoom in
+#define EM_UNDO  FUNC(7) // Emacs Undo
+#define TILDE   FUNC(7) // Emacs Undo
+
+
+// Enable these functions using FUNC(n) macro.
+const uint16_t PROGMEM fn_actions[] = {
+    [0] = ACTION_LAYER_TAP_KEY(_LOWER, KC_PGDN),
+    [1] = ACTION_LAYER_TAP_KEY(_RAISE, KC_PGUP),
+    [2] = ACTION_MODS_TAP_KEY(MOD_LCTL, KC_CAPS),
+    [3] = ACTION_MODS_TAP_KEY(MOD_RSFT, KC_ENT),
+    [4] = ACTION_MODS_KEY(MOD_LCTL, KC_0),
+    [5] = ACTION_MODS_KEY(MOD_LCTL, KC_MINS),
+    [6] = ACTION_MODS_KEY(MOD_LCTL, KC_PLUS),
+    [7] = ACTION_MODS_KEY(MOD_LCTL, KC_UNDS),
+    [8] = ACTION_MODS_KEY(MOD_LSFT, KC_GRV),
+ };
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Qwerty
@@ -56,7 +82,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_QWERTY] = {
   {KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC},
   {KC_ESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT},
-  {KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_ENT },
+  {KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, SFT_ENT},
   {BACKLIT, KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  KC_SPC,  RAISE,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT}
 },
 
@@ -74,7 +100,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_COLEMAK] = {
   {KC_TAB,  KC_Q,    KC_W,    KC_F,    KC_P,    KC_G,    KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCLN, KC_BSPC},
   {KC_ESC,  KC_A,    KC_R,    KC_S,    KC_T,    KC_D,    KC_H,    KC_N,    KC_E,    KC_I,    KC_O,    KC_QUOT},
-  {KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_K,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_ENT },
+  {KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_K,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, SFT_ENT},
   {BACKLIT, KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  KC_SPC,  RAISE,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT}
 },
 
@@ -92,7 +118,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_DVORAK] = {
   {KC_TAB,  KC_QUOT, KC_COMM, KC_DOT,  KC_P,    KC_Y,    KC_F,    KC_G,    KC_C,    KC_R,    KC_L,    KC_BSPC},
   {KC_ESC,  KC_A,    KC_O,    KC_E,    KC_U,    KC_I,    KC_D,    KC_H,    KC_T,    KC_N,    KC_S,    KC_SLSH},
-  {KC_LSFT, KC_SCLN, KC_Q,    KC_J,    KC_K,    KC_X,    KC_B,    KC_M,    KC_W,    KC_V,    KC_Z,    KC_ENT },
+  {KC_LSFT, KC_SCLN, KC_Q,    KC_J,    KC_K,    KC_X,    KC_B,    KC_M,    KC_W,    KC_V,    KC_Z,    SFT_ENT},
   {BACKLIT, KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  KC_SPC,  RAISE,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT}
 },
 
