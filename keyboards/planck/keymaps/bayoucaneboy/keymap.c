@@ -15,7 +15,7 @@
  */
 
 
-#include QMK_KEYBOARD_H
+#include "planck.h"
 
 #define TAPPING_TERM 250
 
@@ -79,6 +79,7 @@ enum macro_keycodes {
 #define AG_CUT      M(KC_AG_CUT)
 #define AG_COPY     M(KC_AG_COPY)
 #define AG_PSTE     M(KC_AG_PASTE)
+
 
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -166,7 +167,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |   #  |   #  |   #  |   #  |   #  |   #  |   #  |   #  |   #  |   #  |   #  |   #  |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
  * |      |   S  |   T  |   P  |   H  |   *  |   *  |   F  |   P  |   L  |   T  |   D  |
- * |------+------+------+------+------+------|------+------+------+------+------+------|
+ * |------+------+------+------+------+------|------+------+------+------+------+------|¸¸¸
  * |      |   S  |   K  |   W  |   R  |   *  |   *  |   R  |   B  |   G  |   S  |   Z  |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * | Exit |      |      |   A  |   O  |             |   E  |   U  |      |      |      |
@@ -194,12 +195,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [NAVIGATION_LAYER] = LAYOUT_planck_grid(
  // _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-    _______, XXXXXXX, XXXXXXX, XXXXXXX, AG_FIND, KC_AG_AGAIN, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, XXXXXXX, _______,
-    _______, AG_UNDO, AG_CUT,  AG_COPY, AG_PSTE, XXXXXXX,     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
-    _______, _______, _______, _______, _______, KC_GRV,      _______, _______, _______, _______, _______, _______
+    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,     XXXXXXX,     XXXXXXX,     XXXXXXX,     XXXXXXX,     XXXXXXX,     XXXXXXX,
+    _______, XXXXXXX, XXXXXXX, XXXXXXX, AG_FIND, KC_AG_AGAIN, KC_LEFT,     KC_DOWN,     KC_UP,       KC_RGHT,     XXXXXXX,     _______,
+    _______, AG_UNDO, AG_CUT,  AG_COPY, AG_PSTE, XXXXXXX,     XXXXXXX,     XXXXXXX,     XXXXXXX,     XXXXXXX,     XXXXXXX,     XXXXXXX,
+    _______, _______, _______, _______, _______, KC_LSHIFT,   KC_LSHIFT,   KC_RALT,     _______,     _______,     _______,     _______
 ),
-
 
 /* Adjust (Lower + Raise)
  * ,-----------------------------------------------------------------------------------.
