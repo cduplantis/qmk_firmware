@@ -17,11 +17,11 @@
 
 #include "planck.h"
 
-#define TAPPING_TERM 250
+#define TAPPING_TERM 200
 
 extern keymap_config_t keymap_config;
 
-static bool option_interrupted[2] = { 0, 0 };
+static bool option_interrupted[4] = { 0, 0, 0, 0 };
 
 static uint16_t space_cadet_timer[5] = { 0, 0, 0, 0, 0 };
 
@@ -157,7 +157,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [RAISE_LAYER] = LAYOUT_planck_grid(
  // _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
     KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_DEL,
-    _______,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_MINS, KC_EQL,  KC_LBRC, KC_RBRC, KC_BSLS,
+    _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_MINS, KC_EQL,  KC_LBRC, KC_RBRC, KC_BSLS,
     _______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_NUHS, KC_NUBS, KC_PGUP, KC_PGDN, _______,
     _______, _______, _______, _______, _______, KC_DEL, KC_DEL, _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY
 ),
@@ -303,67 +303,58 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       return false;
     case KC_LHAO: {
       if (record->event.pressed) {
+        option_interrupted[0] = false;
         space_cadet_timer[0] = timer_read();
-        register_mods(
-          MOD_BIT(KC_LSHIFT) |
-          MOD_BIT(KC_LGUI)   |
-          MOD_BIT(KC_LALT)   |
-          MOD_BIT(KC_LCTRL)
-        );
-      }
-      else {
-        unregister_mods(
-          MOD_BIT(KC_LCTRL) |
-          MOD_BIT(KC_LALT)  |
-          MOD_BIT(KC_LGUI)
-        );
-        if (timer_elapsed(space_cadet_timer[0]) < TAPPING_TERM) {
-          register_code(KC_COMMA);
-          unregister_code(KC_COMMA);
+        register_mods(MOD_BIT(KC_LCTRL));
+      } else {
+        unregister_mods(MOD_BIT(KC_LCTRL));
+        #ifdef DISABLE_SPACE_CADET_ROLLOVER
+          if (get_mods() & MOD_BIT(KC_RCTL)) { // is opposite side option down?
+            option_interrupted[0] = true;
+            option_interrupted[1] = true;
+          }
+        #endif
+        if (!option_interrupted[0] && timer_elapsed(space_cadet_timer[0]) < TAPPING_TERM) {
+          tap_code16(S(KC_COMMA));
         }
-        unregister_mods(MOD_BIT(KC_LSHIFT));
       }
       return false;
     }
     case KC_RHAC: {
       if (record->event.pressed) {
+        option_interrupted[1] = false;
         space_cadet_timer[1] = timer_read();
-        register_mods(
-          MOD_BIT(KC_RSHIFT) |
-          MOD_BIT(KC_RGUI)   |
-          MOD_BIT(KC_RALT)   |
-          MOD_BIT(KC_RCTRL)
-        );
+        register_mods(MOD_BIT(KC_RCTRL));
       }
       else {
-        unregister_mods(
-          MOD_BIT(KC_RCTRL) |
-          MOD_BIT(KC_RALT)  |
-          MOD_BIT(KC_RGUI)
-        );
-        if (timer_elapsed(space_cadet_timer[1]) < TAPPING_TERM) {
-          register_code(KC_DOT);
-          unregister_code(KC_DOT);
+        unregister_mods(MOD_BIT(KC_RCTRL));
+        #ifdef DISABLE_SPACE_CADET_ROLLOVER
+          if (get_mods() & MOD_BIT(KC_LALT)) { // is opposite side option down?
+            option_interrupted[0] = true;
+            option_interrupted[1] = true;
+          }
+        #endif
+        if (!option_interrupted[1] && timer_elapsed(space_cadet_timer[1]) < TAPPING_TERM) {
+          tap_code16(S(KC_DOT));
         }
-        unregister_mods(MOD_BIT(KC_RSHIFT));
       }
       return false;
     }
 
     case KC_LOBO: {
       if (record->event.pressed) {
-        option_interrupted[0] = false;
+        option_interrupted[2] = false;
         space_cadet_timer[2] = timer_read();
         register_mods(MOD_BIT(KC_LALT));
       } else {
         unregister_mods(MOD_BIT(KC_LALT));
         #ifdef DISABLE_SPACE_CADET_ROLLOVER
           if (get_mods() & MOD_BIT(KC_RALT)) { // is opposite side option down?
-            option_interrupted[0] = true;
-            option_interrupted[1] = true;
+            option_interrupted[2] = true;
+            option_interrupted[3] = true;
           }
         #endif
-        if (!option_interrupted[0] && timer_elapsed(space_cadet_timer[2]) < TAPPING_TERM) {
+        if (!option_interrupted[2] && timer_elapsed(space_cadet_timer[2]) < TAPPING_TERM) {
           tap_code16(S(KC_LBRACKET));
         }
       }
@@ -372,7 +363,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
     case KC_ROBC: {
       if (record->event.pressed) {
-        option_interrupted[1] = false;
+        option_interrupted[3] = false;
         space_cadet_timer[3] = timer_read();
         register_mods(MOD_BIT(KC_RALT));
       }
@@ -380,11 +371,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         unregister_mods(MOD_BIT(KC_RALT));
         #ifdef DISABLE_SPACE_CADET_ROLLOVER
           if (get_mods() & MOD_BIT(KC_LALT)) { // is opposite side option down?
-            option_interrupted[0] = true;
-            option_interrupted[1] = true;
+            option_interrupted[2] = true;
+            option_interrupted[3] = true;
           }
         #endif
-        if (!option_interrupted[1] && timer_elapsed(space_cadet_timer[3]) < TAPPING_TERM) {
+        if (!option_interrupted[3] && timer_elapsed(space_cadet_timer[3]) < TAPPING_TERM) {
           tap_code16(S(KC_RBRACKET));
         }
       }
